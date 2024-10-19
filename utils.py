@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-#import streamlit as st
+import streamlit as st
 import numpy as np
 import json
 import base64
@@ -29,6 +29,19 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'GCP_key.json'
 vertexai.init(project=PROJECT_ID, location=LOCATION)
 
 GCP_MODEL_ID = "gemini-1.5-flash-001"
+
+
+def reset_memory():
+    """resets assistant memory"""
+    st.session_state.ai_assistant = 0
+    st.session_state.user_input = ''
+    st.session_state.chat_memory = ChatMessageHistory()
+
+
+def submit_query():
+    """submits query"""
+    st.session_state.user_input = st.session_state.widget
+    st.session_state.widget = ''
 
 
 def generate_llm_chain(language: str, channel_name: str, parts: int, section: int, time: int,
