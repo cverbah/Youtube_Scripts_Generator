@@ -48,7 +48,7 @@ st.image(image, caption='Genera la vida que siempre deseaste', use_column_width=
 #        return output
 
 
-SESSION_TIMEOUT_MINUTES = 15
+SESSION_TIMEOUT_MINUTES = 30
 
 # Initialize session state variables
 if 'session_start' not in st.session_state:
