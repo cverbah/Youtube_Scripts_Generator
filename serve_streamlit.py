@@ -19,12 +19,12 @@ app = App(name="youtube-script-gen-v1", image=image)
 streamlit_script_local_path_folder = Path(__file__).parent
 streamlit_script_remote_path_folder = Path("/root/")
 
-streamlit_script_local_path = Path(__file__).parent / "home.py"  # main file to run streamlit
-streamlit_script_remote_path = streamlit_script_remote_path_folder / "home.py"
+streamlit_script_local_path = Path(__file__).parent / "Inicio.py"  # main file to run streamlit
+streamlit_script_remote_path = streamlit_script_remote_path_folder / "Inicio.py"
 
 if not streamlit_script_local_path.exists():
     raise RuntimeError(
-        "home.py not found! Place the script with your streamlit app in the same directory."
+        "Inicio.py not found! Place the script with your streamlit app in the same directory."
     )
 
 streamlit_script_mount = Mount.from_local_file(local_path=streamlit_script_local_path,
