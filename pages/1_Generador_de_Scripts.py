@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 st.set_page_config(
-        page_title="Generdor de Scripts",
+        page_title="Generador de Scripts",
         page_icon=":robot_face:",
         layout="wide",
     )
