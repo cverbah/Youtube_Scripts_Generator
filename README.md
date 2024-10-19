@@ -1,12 +1,13 @@
 # Youtube Scripts Generator
 <img src="./images/banner_option_3.jpeg" alt="Logo" width="800" height="400">
-Built using:
+Built using:<br>
+
 - Modal Cloud, Streamlit, Langchain, LLM models: Gemini 1.5 Pro & Flash  (for now)
 <br>
 
 You need:
 - To set up a modal account [Modal: Serverless platform for AI teams](https://modal.com/)
-- To have a GCP account with the Vertex AI API enabled
+- To have a GCP account with the Vertex AI API enabled for using the LLM Models
 - A service account key saved as GCP_key.json in the project folder <br>
 
 
