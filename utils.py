@@ -3,11 +3,9 @@ import pandas as pd
 import streamlit as st
 import numpy as np
 import json
-import base64
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part, FinishReason
 import vertexai.preview.generative_models as generative_models
-import matplotlib.pyplot as plt
 import io
 import contextlib
 from dotenv import load_dotenv
