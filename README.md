@@ -10,7 +10,7 @@ You need:
 - A service account key saved as GCP_key.json in the project folder <br>
 
 
-For running the app in the cloud: <br>
+For deploying the app using Modal cloud: <br>
 1. `pip install -r requirements.txt`
 2. `Create a API token in your Modal Workspace`
 3. `modal serve serve_streamlit.py`    For serving the app OR
