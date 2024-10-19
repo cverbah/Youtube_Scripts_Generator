@@ -26,8 +26,6 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'GCP_key.json'
 
 vertexai.init(project=PROJECT_ID, location=LOCATION)
 
-GCP_MODEL_ID = "gemini-1.5-flash-001"
-
 
 def reset_memory():
     """resets assistant memory"""
