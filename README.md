@@ -1,5 +1,5 @@
 # Youtube Script Generator
-<img src="./images/banner_option_3.jpeg" alt="Logo" width="600" height="100">
+<img src="./images/banner_option_3.jpeg" alt="Logo" width="800" height="500">
 Built using:
 - Modal Cloud, Streamlit, Langchain, LLM models: Gemini 1.5 Pro & Flash  (for now)
 <br>
