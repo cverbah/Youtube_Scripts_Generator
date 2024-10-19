@@ -1,4 +1,4 @@
-# Youtube Script Generator
+# Youtube Scripts Generator
 <img src="./images/banner_option_3.jpeg" alt="Logo" width="800" height="400">
 Built using:
 - Modal Cloud, Streamlit, Langchain, LLM models: Gemini 1.5 Pro & Flash  (for now)
