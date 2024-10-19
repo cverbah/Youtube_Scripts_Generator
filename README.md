@@ -6,7 +6,7 @@ Built using:<br>
 <br>
 
 You need:
-- To set up a modal account [Modal: Serverless platform for AI teams](https://modal.com/)
+- To set up a modal account (if you want to deploy the app) [Modal: Serverless platform for AI teams](https://modal.com/)
 - To have a GCP account with the Vertex AI API enabled for using the LLM Models
 - A service account key saved as GCP_key.json in the project folder <br>
 
