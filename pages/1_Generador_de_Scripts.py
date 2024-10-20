@@ -45,7 +45,6 @@ with st.sidebar:
 
 try:
     st.title(':robot_face: Generador de Scripts')
-    #st.subheader("Primero seleccione los parámetros para la generación del script")
     st.markdown("<span style='font-size: 16px;'>Primero seleccione los parámetros para la generación del script"
                 " en el menú de la izquierda</span>",
                 unsafe_allow_html=True)
