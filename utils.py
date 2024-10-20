@@ -88,7 +88,7 @@ def generate_llm_chain(language: str, channel_name: str, parts: int, section: in
                 f"Estás generando la parte {section} del guión.",
                 f"El guión debe venir de la siguiente manera:\
                    Imágen: recomendación de imágen o video acorde a la parte {section} del guión.\
-                   Debe ser solo UNA recomendación de imágen o video por cada {section}. Recuerda que solo 1 imagén por cada parte del guión.\
+                   Debe ser solo UNA recomendación de imágen o video por cada {section}. Recuerda que solo 1 imagén por cada parte del guión, \
                    que se usará para hacer una transición a la siguiente parte del guión.\
                    Narrador: guión de cada sección correspondiente a la parte: {section} del guión,\
                    Tiempo: rango de tiempo para cada sección,\
