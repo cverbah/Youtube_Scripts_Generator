@@ -11,7 +11,7 @@ st.set_page_config(
 
 with st.sidebar:
     st.title(':gear: Parámetros para Script')
-    models = ["gemini-1.5-flash-001", "gemini-1.5-flash-002", "gemini-1.5-pro-002"]
+    models = ["gemini-1.5-flash-002", "gemini-1.5-pro-002"]
     language = ["español", "inglés"]
     time = [8, 10, 15, 20, 25, 30]
     parts = [1, 3, 5, 10, 15, 20, 30]
@@ -20,7 +20,7 @@ with st.sidebar:
         st.session_state.selected_language = language[0]
 
     if 'selected_model' not in st.session_state:
-        st.session_state.selected_model = models[1]
+        st.session_state.selected_model = models[0]
 
     if 'selected_time' not in st.session_state:
         st.session_state.selected_time = time[3]
