@@ -93,8 +93,8 @@ def generate_llm_chain(language: str, channel_name: str, parts: int, section: in
                    Narrador: guión de cada sección correspondiente a la parte: {section} del guión,\
                    Tiempo: rango de tiempo para cada sección,\
                    Conteo de palabras: cuenta la cantidad de palabras generadas en Narrador.\
-                   Ten en consideración que en promedio deben haber entre 130 a 150 palabras por cada minuto narrado.\
-                   Por ejemplo: para Tiempo: 0:00 - 1:00 del guión deben haber al menos 130 palabras."
+                   Ten en consideración que en promedio deben haber entre 250 a 300 palabras por cada minuto narrado.\
+                   Por ejemplo: para Tiempo: 0:00 - 1:00 del guión deben haber al menos 250 palabras."
             ],
              ),
             ("placeholder", "{chat_history}"),
