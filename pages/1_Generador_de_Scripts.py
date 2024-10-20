@@ -62,7 +62,7 @@ try:
     col1, col2 = st.columns([0.8, 0.3], gap='large')
     with col1:
         st.text_input('', key='widget', on_change=submit_query,
-                      placeholder='Ingrese el prompt sobre qué tratará su script')
+                      placeholder='Generame un script sobre:')
         if st.session_state.user_input:
             st.write(f'Promp utilizado: {st.session_state.user_input}')
 
