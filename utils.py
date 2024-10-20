@@ -73,7 +73,7 @@ def generate_llm_chain(language: str, channel_name: str, parts: int, section: in
                    Usa una estructura de causa-efecto para que cada parte fluya naturalmente a la siguiente parte del guión. \
                    Nunca generes en la última parte del guión una conclusión o resumen del guión. \
                    Cada parte del guión que generes va a tener una duración de {sections} minutos correspondiente a la parte {section} del guión.\
-                   Por Ejemplo: Si el guión va a tener una duración total de {time}: 20 minutos y debe tener 10 partes, \
+                   Por Ejemplo: Si el guión va a tener una duración total de: 20 minutos y debe tener 10 partes, \
                    cada parte del guión debe tener una duración de 2 minutos: parte 1: del minuto 0 al minuto 2, \
                    parte 2: del minuto 2 al minuto 4, parte 3: del minuto 4 al 6, hasta llegar al parte 10: del minuto 18 al 20. \
                    Si es la primera parte del video, al inicio del guión debes dar una Bienvenida al canal: {channel_name} \
