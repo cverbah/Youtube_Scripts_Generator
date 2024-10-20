@@ -41,7 +41,7 @@ def submit_query():
 
 
 def generate_llm_chain(language: str, channel_name: str, parts: int, section: int, time: int,
-                       temperature: float, model_name=GCP_MODEL_ID):
+                       temperature: float, model_name: str):
     """generates a script for Youtube video"""
     assert 0 <= temperature <= 1, 'temperature must be between 0 and 1'
     llm = GoogleGenerativeAI(model=model_name, google_api_key=GCP_API_KEY,
