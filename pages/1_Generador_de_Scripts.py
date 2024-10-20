@@ -94,7 +94,10 @@ try:
                                                                     model_name=st.session_state.selected_model)
 
                         st.session_state.ai_memory = add_memory_chain(st.session_state.chain, st.session_state.chat_memory)
-                        aux = f'Hazme un guión de la parte: {section} del video sobre: {st.session_state.user_input}'
+                        aux = (f'Hazme un guión de la parte: {section} del video sobre: {st.session_state.user_input}. '
+                               f'El guión debe ser uno solo y estará separado en {parts} partes manteniendo '
+                               f'un solo guión de forma continua')
+
                         if st.session_state.ai_assistant:
                             response = st.session_state.ai_memory.invoke(
                                 #{"input": st.session_state.user_input},
