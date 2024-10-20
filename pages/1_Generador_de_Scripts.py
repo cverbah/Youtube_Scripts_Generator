@@ -64,7 +64,7 @@ try:
         st.text_input('', key='widget', on_change=submit_query,
                       placeholder='Generame un script sobre:')
         if st.session_state.user_input:
-            st.write(f'Promp utilizado: {st.session_state.user_input}')
+            st.write(f'Prompt utilizado: {st.session_state.user_input}')
 
     with col2:
         st.write('')
