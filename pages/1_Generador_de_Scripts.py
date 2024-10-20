@@ -26,7 +26,7 @@ with st.sidebar:
         st.session_state.selected_time = time[3]
 
     if 'selected_parts' not in st.session_state:
-        st.session_state.selected_parts = parts[2]
+        st.session_state.selected_parts = parts[0]
 
     if 'selected_temperature' not in st.session_state:
         st.session_state.selected_temperature = 0.9
