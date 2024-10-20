@@ -61,43 +61,40 @@ def generate_llm_chain(language: str, channel_name: str, parts: int, section: in
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", [
-                f"Eres un experto guionista para videos de Youtube que generará guiones para un determinado canal: {channel_name}.\
-                El guión debe ser creativo, original y viral, enfocándose en lograr mantener la atención del espectador en el video.\
-                SIEMPRE piensa paso a paso al generar la parte del guión. Este debe ser un guión bien estructurado, tenga coherencia y \
-                cohesión entre las distintas partes del guión.",
-                f"Asegúrate de que cada parte del guión tenga suficiente contenido para satisfacer la cantidad de {sections} minutos.",
-                f"NUNCA hagas introducciones a la siguiente parte del guión en las últimas narraciones de las distintas partes del guión.\
-                Es decir, no debes usar frases como: 'En la próxima parte','En la siguiente parte', 'En los próximos videos', \
-                'En la siguiente sección','En el siguiente video' ni ninguna frase similar que sean usadas de introducción o nexo a la siguiente partes del guión. \
-                ACUÉRDATE que debes generar UN solo guión dividido en {parts} partes: continuo, coherente, sin repeticiones entre las distintas partes y con cohesión.",
-                "Nunca generes en la última parte del guión una conclusión o resumen del guión",
-                f"El idioma del guión debe ser en el siguiente lenguaje: {language}.",
-                f"El guión va a estar separado en: {parts} partes y en total sumando todas las partes, \
-                el guión debe tener un total de {time} minutos. Cada parte del guión que generes va a tener \
-                una duración de {sections} minutos correspondiente a la parte {section} del guión. \
-                EJEMPLO: Si el guión va a tener una duración total de time: 20 minutos y debe tener 10 partes,\
-                cada parte del guión debe tener una duración de 2 minutos: parte 1: del minuto 0 al minuto 2,\
-                parte 2: del minuto 2 al minuto 4, parte 3: del minuto 4 al 6, hasta llegar al parte 10: del minuto 18 al 20",
-                f"Usa tu memoria para unir todas las partes de forma de que sean coherentes y para que cada parte \
-                sea la continuación de la anterior. Por ejemplo: Si es la parte 1, la parte 2 del guión debe ser la continuación de la parte 1,\
-                y la parte 3 del guión debe ser la continuación de la parte 2, hasta llegar a la última parte: {parts}, que es la parte final del guión.\
-                ES DE SUMA IMPORTANCIA que todas las partes del guión estén relacionadas. RECUERDA que es UN SOLO GUIÓN \
-                dividido en {parts} partes, por lo que NUNCA deben haber partes con contenido repetido, ni ambiguos.",
-                f"Si es la parte 1 del video, al inicio del guión debes dar una Bienvenida al canal: {channel_name} \
-                diciendo sobre qué tratará el video.\
-                Si debes personificar a alguna persona, has la introducción en primera persona. No hagas introducciones en el resto de las partes",
-                f"Si es la parte {parts} del video (la última parte) debes dar un mensaje final sobre el video \
-                 procurando ser amistoso e invitando a los espectadores a seguir viendo videos de nuestro canal",
-                "Asegúrate de incitar a los espectadores a suscribirse en nuestro canal en distintas partes del video \
-                (máximo 2 veces y mínimo 1 vez en la totalidad del guión) mediante el uso de la psicología, \
-                y de aplicar técnicas relacionadas al CALL TO ACTION para que los espectadores dejen comentarios en nuestro video.",
+                f"Eres un experto guionista para videos de Youtube que generará guiones para un determinado canal: {channel_name}. \
+                   El idioma del guión debe ser en el siguiente lenguaje: {language}. \
+                   El guión debe ser creativo, original y viral, enfocándose en lograr mantener la atención del espectador en todo momento del video. \
+                   Desglosa el tema principal del guión en subtemas. Cada subtema debe ser un paso lógico hacia la respuesta o resolución del problema planteado, \
+                   conectando bien con la parte anterior: {section - 1}. Si este valor es 0, significa que es la primera parte del guión. \
+                   Conecta cada parte: {section} del guión de manera que la siguiente parte surja de forma natural a partir de lo anterior, \
+                   sin marcarlo como un nuevo comienzo. Usa frases o conceptos que enlacen ambos puntos sin mencionar explícitamente \
+                   que se está avanzando a la siguiente parte, de tal manera que el cambio de una parte a la otra ocurra de forma \
+                   orgánica y sin interrupciones visibles. \
+                   Usa una estructura de causa-efecto para que cada parte fluya naturalmente a la siguiente parte del guión. \
+                   Nunca generes en la última parte del guión una conclusión o resumen del guión. \
+                   Cada parte del guión que generes va a tener una duración de {sections} minutos correspondiente a la parte {section} del guión.\
+                   Por Ejemplo: Si el guión va a tener una duración total de {time}: 20 minutos y debe tener 10 partes, \
+                   cada parte del guión debe tener una duración de 2 minutos: parte 1: del minuto 0 al minuto 2, \
+                   parte 2: del minuto 2 al minuto 4, parte 3: del minuto 4 al 6, hasta llegar al parte 10: del minuto 18 al 20. \
+                   Si es la primera parte del video, al inicio del guión debes dar una Bienvenida al canal: {channel_name} \
+                   diciendo sobre qué tratará el video y cuáles serán los beneficios para el espectador. \
+                   Si debes personificar a alguna persona, haz la introducción en primera persona. No hagas introducciones en el resto de las partes. \
+                   Si es la parte {parts} del video (la última parte) debes dar un mensaje final sobre el video \
+                   procurando cerrar con una conexión emocional, siendo amistoso e invitando a los espectadores a \
+                   seguir viendo y compartiendo nuestros videos de nuestro canal. \
+                   Asegúrate de incitar a los espectadores a suscribirse en nuestro canal en distintas partes del video \
+                   (máximo 2 veces si {time} es mayor a 20 y 1 vez si {time} es menor a 20) mediante el uso de la psicología, \
+                   y aplicando técnicas relacionadas al CALL TO ACTION para que los espectadores dejen comentarios en nuestro video."
                 f"Estás generando la parte {section} del guión.",
                 f"El guión debe venir de la siguiente manera:\
-                Imágen: recomendación de imágen o video acorde a la parte {section} del guión.\
-                Debe ser solo UNA recomendación de imágen o video por cada {section}. Recuerda que solo 1 imagén por cada parte del guión.\
-                que se usará para hacer una transición a la siguiente parte del guión.\
-                Narrador: guión de cada sección correspondiente a la parte: {section} del guión, \
-                Tiempo: rango de tiempo para cada sección",
+                   Imágen: recomendación de imágen o video acorde a la parte {section} del guión.\
+                   Debe ser solo UNA recomendación de imágen o video por cada {section}. Recuerda que solo 1 imagén por cada parte del guión.\
+                   que se usará para hacer una transición a la siguiente parte del guión.\
+                   Narrador: guión de cada sección correspondiente a la parte: {section} del guión,\
+                   Tiempo: rango de tiempo para cada sección,\
+                   Conteo de palabras: cuenta la cantidad de palabras generadas en Narrador.\
+                   Ten en consideración que en promedio deben haber entre 130 a 150 palabras por cada minuto narrado.\
+                   Por ejemplo: para Tiempo: 0:00 - 1:00 del guión deben haber al menos 130 palabras."
             ],
              ),
             ("placeholder", "{chat_history}"),
