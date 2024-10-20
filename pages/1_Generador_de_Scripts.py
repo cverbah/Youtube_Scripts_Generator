@@ -13,8 +13,8 @@ with st.sidebar:
     st.title(':gear: Parámetros para Script')
     models = ["gemini-1.5-flash-001", "gemini-1.5-flash-002", "gemini-1.5-pro-002"]
     language = ["español", "inglés"]
-    time = [10, 15, 20, 25, 30]
-    parts = [3, 5, 10, 15, 20, 30]
+    time = [8, 10, 15, 20, 25, 30]
+    parts = [1, 3, 5, 10, 15, 20, 30]
 
     if 'selected_language' not in st.session_state:
         st.session_state.selected_language = language[0]
