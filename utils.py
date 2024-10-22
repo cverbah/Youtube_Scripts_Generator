@@ -16,6 +16,9 @@ from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 from tqdm import tqdm
+import fitz  # PyMuPDF for PDFs
+from docx import Document
+
 
 #envs
 load_dotenv()
@@ -25,6 +28,49 @@ GCP_API_KEY = os.environ["GCP_API_KEY"]
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'GCP_key.json'
 
 vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+
+def refine_script(parts: int, model_name="gemini-1.5-pro-002", temperature=0.9):
+    """parses a text to json"""
+    llm = GoogleGenerativeAI(model=model_name, google_api_key=GCP_API_KEY,
+                             generation_config={"max_output_tokens": 8192,  # max
+                                                "temperature": temperature,
+                                                "top_p": 0.95,
+                                                })
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", [
+                f"Se te entregará un guión para un video de youtube separado en {parts} partes.\
+                Debes editarlo de tal forma de asegurar de que el guión tenga coherencia entre todas sus partes. \
+                No deben haber ninguna parte del guión con repetición de información."
+            ],
+             ),
+            ("human", "{input}"),
+        ])
+
+    chain = prompt | llm
+    return chain
+
+
+def extract_text_from_docx(file):
+    """transforms docx to text"""
+    doc = Document(file)
+    text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
+    return text
+
+
+def extract_text_from_pdf(file):
+    """transforms pdf to text"""
+    try:
+        file_bytes = io.BytesIO(file.read())  # Leer el archivo como bytes
+        pdf_document = fitz.open(stream=file_bytes, filetype="pdf")
+        text = ""
+        for page_num in range(pdf_document.page_count):
+            page = pdf_document.load_page(page_num)
+            text += page.get_text("text")
+        return text
+    except Exception as e:
+        return f"Error al extraer texto del PDF: {e}"
 
 
 def reset_memory():
@@ -41,7 +87,7 @@ def submit_query():
 
 
 def generate_llm_chain(language: str, channel_name: str, parts: int, section: int, time: int,
-                       temperature: float, model_name: str):
+                       temperature: float, model_name: str, context: str):
     """generates a script for Youtube video"""
     assert 0 <= temperature <= 1, 'temperature must be between 0 and 1'
     llm = GoogleGenerativeAI(model=model_name, google_api_key=GCP_API_KEY,
@@ -58,6 +104,7 @@ def generate_llm_chain(language: str, channel_name: str, parts: int, section: in
     sections = int(round(time / parts, 0))
     if section == parts:
         last_section = True
+
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", [
@@ -86,6 +133,9 @@ def generate_llm_chain(language: str, channel_name: str, parts: int, section: in
                    (máximo 2 veces si {time} es mayor a 20 y 1 vez si {time} es menor a 20) mediante el uso de la psicología, \
                    y aplicando técnicas relacionadas al CALL TO ACTION para que los espectadores dejen comentarios en nuestro video."
                 f"Estás generando la parte {section} del guión.",
+                f"Debes usar como contexto para generar el guión: {context}. Si {context} es '', \
+                  No uses contexto para el guión",
+                f"Revisa siempre todas las partes anteriores del guión, de forma que no haya información repetida",
                 f"El guión debe venir de la siguiente manera:\
                    Imágen: recomendación de imágen o video acorde a la parte {section} del guión.\
                    Debe ser solo UNA recomendación de imágen o video por cada {section}. Recuerda que solo 1 imagén por cada parte del guión, \
@@ -93,8 +143,10 @@ def generate_llm_chain(language: str, channel_name: str, parts: int, section: in
                    Narrador: guión de cada sección correspondiente a la parte: {section} del guión,\
                    Tiempo: rango de tiempo para cada sección,\
                    Conteo de palabras: cuenta la cantidad de palabras generadas en Narrador.\
-                   Ten en consideración que en promedio deben haber entre 250 a 300 palabras por cada minuto narrado.\
-                   Por ejemplo: para Tiempo: 0:00 - 1:00 del guión deben haber al menos 250 palabras."
+                   Ten en consideración que en promedio deben haber entre 280 a 300 palabras por cada minuto narrado.\
+                   Por ejemplo: \
+                   Si usas rangos de Tiempo de 1 minuto: 0:00 - 1:00,  la parte {section} del guión deben haber al menos 280 palabras. \
+                   Si usas rangos de Tiempo de 2 minutos: 2:00 - 4:00,  la parte {section} del guión deben haber al menos 560 palabras."
             ],
              ),
             ("placeholder", "{chat_history}"),

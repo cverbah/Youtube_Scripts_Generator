@@ -2,6 +2,7 @@ import streamlit as st
 from utils import *
 import pandas as pd
 import numpy as np
+import json
 
 st.set_page_config(
         page_title="Generador de Scripts",
@@ -55,9 +56,34 @@ try:
     if 'user_input' not in st.session_state:
         st.session_state.user_input = ''
 
+    if 'context' not in st.session_state:
+        st.session_state.context = ''
+
     st.session_state.channel_name = st.text_input("Ingrese el nombre de su canal", value=st.session_state.channel_name)
     if st.session_state.channel_name != '':
         st.write(f"Nombre del canal: {st.session_state.channel_name}")
+
+    st.markdown("<span style='font-size: 20px;'>Contexto para prompt (Solo si lo necesita): </span>", unsafe_allow_html=True)
+
+    st.session_state.context_file = st.file_uploader("Suba un archivo PDF o Word", type=["pdf", "docx"])
+    if st.session_state.context_file:
+        if st.session_state.context_file.name.endswith(".pdf"):
+            extracted_text = extract_text_from_pdf(st.session_state.context_file)
+            st.write("Texto extraído del PDF para usar como contexto")
+        elif st.session_state.context_file.name.endswith(".docx"):
+            extracted_text = extract_text_from_docx(st.session_state.context_file)
+            st.write("Texto extraído del Word para usar como contexto")
+
+        st.session_state.context = extracted_text
+
+        #st.text(extracted_text[:100])
+
+        # parse to json by chapters: too much tokens the output =(
+        #llm = split_file_to_chapters(model_name="gemini-1.5-flash-002", temperature=1)
+        #parsed_text = llm.invoke({"input": extracted_text})
+        #st.header("Contenido del archivo JSON")
+        #st.json(parsed_text)
+
 
     col1, col2 = st.columns([0.8, 0.3], gap='large')
     with col1:
@@ -91,7 +117,8 @@ try:
                                                                     section=section,
                                                                     time=st.session_state.selected_time,
                                                                     temperature=st.session_state.selected_temperature,
-                                                                    model_name=st.session_state.selected_model)
+                                                                    model_name=st.session_state.selected_model,
+                                                                    context=st.session_state.context)
 
                         st.session_state.ai_memory = add_memory_chain(st.session_state.chain, st.session_state.chat_memory)
                         aux = (f'Hazme un guión de la parte: {section} del video sobre: {st.session_state.user_input}. '
