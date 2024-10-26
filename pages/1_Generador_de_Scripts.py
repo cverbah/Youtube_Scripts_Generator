@@ -5,7 +5,7 @@ import numpy as np
 import json
 
 st.set_page_config(
-        page_title="Generador de Scripts",
+        page_title="Scripts Gen",
         page_icon=":robot_face:",
         layout="wide",
     )

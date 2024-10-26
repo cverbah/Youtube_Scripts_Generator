@@ -6,7 +6,7 @@ import json
 import whisper
 
 st.set_page_config(
-        page_title="Youtube videos to txt",
+        page_title="Transcripts Gen",
         page_icon=":robot_face:",
         layout="wide",
     )
