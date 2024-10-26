@@ -31,6 +31,29 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'GCP_key.json'
 vertexai.init(project=PROJECT_ID, location=LOCATION)
 
 
+def translate_script(input_language: str, output_language:str,
+                     model_name="gemini-1.5-flash-002", temperature=0.9):
+    """parses a text to json"""
+    llm = GoogleGenerativeAI(model=model_name, google_api_key=GCP_API_KEY,
+                             generation_config={"max_output_tokens": 8192,  # max
+                                                "temperature": temperature,
+                                                "top_p": 0.95,
+                                                })
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", [
+                f"Se te entregará un guión para un video de youtube.\
+                Debes traducir el guión del idioma: {input_language} al idioma: {output_language}. \
+                Verifica que el guión traducido no tenga errores y que sea coherente."
+            ],
+             ),
+            ("human", "{input}"),
+        ])
+
+    chain = prompt | llm
+    return chain
+
+
 def save_dict_to_txt(dictionary, file_path):
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(dictionary, f, ensure_ascii=False, indent=4)
