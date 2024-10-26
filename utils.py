@@ -18,7 +18,8 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 from tqdm import tqdm
 import fitz  # PyMuPDF for PDFs
 from docx import Document
-
+import yt_dlp
+import ffmpeg
 
 #envs
 load_dotenv()
@@ -29,6 +30,48 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'GCP_key.json'
 
 vertexai.init(project=PROJECT_ID, location=LOCATION)
 
+
+def save_dict_to_txt(dictionary, file_path):
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(dictionary, f, ensure_ascii=False, indent=4)
+
+
+def calculate_length_video(total_minutes):
+    """Converts total minutes to a string in the format 'MM:SS'."""
+    minutes = int(total_minutes)
+    seconds = int((total_minutes - minutes) * 60)
+    return f"{minutes:02}:{seconds:02}"  # Format as MM:SS
+
+
+def youtube_to_mp3(url: str, output_path: str):
+    """
+    Downloads a YouTube video, extracts its audio, and converts it to MP3 format using yt-dlp.
+    """
+    try:
+        # Step 1: Download the audio using yt-dlp
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'outtmpl': 'temp_audio.%(ext)s',
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            }],
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        # Rename the downloaded file to output_path
+        temp_path = "temp_audio.mp3"
+        if os.path.exists(temp_path):
+            os.rename(temp_path, output_path)
+
+        print("Download and conversion successful.")
+        return output_path
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 def refine_script(parts: int, model_name="gemini-1.5-pro-002", temperature=0.9):
     """parses a text to json"""

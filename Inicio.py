@@ -20,6 +20,8 @@ st.markdown("<span style='font-size: 20px;'>2 - Generación de **Descripciones**
                 unsafe_allow_html=True)
 st.markdown("<span style='font-size: 20px;'>3 - Generación de **Imágenes** para tus videos (ToDo)  :building_construction:</span>",
                 unsafe_allow_html=True)
+st.markdown("<span style='font-size: 20px;'>4 - Transcripción de videos de Youtube a texto (ToDo)  :building_construction:</span>",
+                unsafe_allow_html=True)
 st.image(image, caption='Genera la vida que siempre deseaste', use_column_width=True)
 
 #@st.cache_data

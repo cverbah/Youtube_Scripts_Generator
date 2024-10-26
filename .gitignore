@@ -4,4 +4,6 @@ __pycache__/
 *.idea
 *.json
 *.csv
+*.mp3
+*.txt
 
