@@ -14,7 +14,7 @@ st.set_page_config(
 try:
     st.title(':robot_face: Transcripts de videos/mp3')
     transcript_type = st.selectbox("Seleccione tipo", ['Youtube video', 'Mp3'], index=0)
-    model = whisper.load_model("base")  # se puede cambiar
+    model = whisper.load_model("base")  # can be changed to a bigger model
     uploaded_mp3_file = None
     if 'url_name' not in st.session_state:
         st.session_state.url_name = ''
@@ -32,12 +32,10 @@ try:
 
     if transcript_type == 'Mp3':
         st.subheader('Transcript de mp3')
-        # File uploader widget
         uploaded_mp3_file = st.file_uploader("Suba archivo en formato mp3", type=["mp3"])
 
-        # Play the audio file if uploaded
+        # Play the audio file if uploaded and save mp3
         if uploaded_mp3_file is not None:
-            # Display the audio player
             st.audio(uploaded_mp3_file, format="audio/mp3")
             with open("mp3_temp.mp3", "wb") as f:
                 f.write(uploaded_mp3_file.getbuffer())
@@ -53,9 +51,9 @@ try:
 
             result = model.transcribe(temp_aux)
             save_dict_to_txt(result, 'transcript_all.txt')
+            save_dict_to_txt(result['text'], 'transcript_text.txt')
             # print(result["text"])
             for i in result["segments"]:
-                # print(f"inicio {i['start']} - termino {i['end']}")
                 #st.write(f"inicio {i['start']} - termino {i['end']}")
                 st.write(i['text'])
                 lenght_video = i['end']
