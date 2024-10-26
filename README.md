@@ -10,8 +10,6 @@ You need:
 - To have a GCP account with the Vertex AI API enabled for using the LLM Models
 - A service account key saved as GCP_key.json in the project folder <br>
 
-For running locally the whisper model: <br>
-0. `pip install git+https://github.com/openai/whisper.git`
 <br>
 For deploying the app using Modal cloud: <br>
 1. `pip install -r requirements.txt`
@@ -20,6 +18,8 @@ For deploying the app using Modal cloud: <br>
 4. `modal deploy serve_streamlit.py` For deploying the app in the modal cloud
 <br>
 
+For running locally the whisper model: <br>
+0. `pip install git+https://github.com/openai/whisper.git`
 For running the app in your local PC: <br>
 1. `pip install -r requirements.txt`
 2. `streamlit run Inicio.py`
