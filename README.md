@@ -18,7 +18,7 @@ For deploying the app using Modal cloud: <br>
 4. `modal deploy serve_streamlit.py` For deploying the app in the modal cloud
 <br>
 
-For running the app in your local PC: <br>:
+For running the app in your local PC: <br>
 0. `pip install git+https://github.com/openai/whisper.git`
 1. `pip install -r requirements.txt`
 2. `streamlit run Inicio.py`
