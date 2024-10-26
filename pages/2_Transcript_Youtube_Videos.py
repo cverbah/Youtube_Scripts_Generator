@@ -13,8 +13,7 @@ st.set_page_config(
 
 try:
     st.title(':robot_face: Transcript de videos de Youtube')
-    st.markdown("<span style='font-size: 16px;'>Ingrese la url del video a transcribir"
-                " en el menú de la izquierda</span>",
+    st.markdown("<span style='font-size: 16px;'>Ingrese la url del video a transcribir</span>",
                 unsafe_allow_html=True)
 
     if 'url_name' not in st.session_state:
