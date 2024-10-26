@@ -1,4 +1,4 @@
-# Youtube Scripts Generator
+# Youtube Tools for Automated channels
 <img src="./images/banner_option_3.jpeg" alt="Logo" width="800" height="400">
 Built using:<br>
 
