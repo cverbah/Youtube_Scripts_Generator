@@ -105,38 +105,39 @@ try:
             if st.session_state.ai_assistant == 0:
                 st.session_state.chat_memory = ChatMessageHistory()
                 st.session_state.ai_assistant = 1
-                script = []
-                placeholder = st.empty()
-                with st.spinner("Generando Script.."):
-                    for i in range(1, st.session_state.selected_parts+1):
-                        section = i
-                        placeholder.text(f'Generando parte {i}')
-                        st.session_state.chain = generate_llm_chain(language=st.session_state.selected_language,
-                                                                    channel_name=st.session_state.channel_name,
-                                                                    parts=st.session_state.selected_parts,
-                                                                    section=section,
-                                                                    time=st.session_state.selected_time,
-                                                                    temperature=st.session_state.selected_temperature,
-                                                                    model_name=st.session_state.selected_model,
-                                                                    context=st.session_state.context)
 
-                        st.session_state.ai_memory = add_memory_chain(st.session_state.chain, st.session_state.chat_memory)
-                        aux = (f'Hazme un guión de la parte: {section} del video sobre: {st.session_state.user_input}. '
-                               f'El guión debe ser uno solo y estará separado en {st.session_state.selected_parts} partes manteniendo '
-                               f'un solo guión de forma continua')
+            script = []
+            placeholder = st.empty()
+            with st.spinner("Generando Script.."):
+                for i in range(1, st.session_state.selected_parts+1):
+                    section = i
+                    placeholder.text(f'Generando parte {i}')
+                    st.session_state.chain = generate_llm_chain(language=st.session_state.selected_language,
+                                                                channel_name=st.session_state.channel_name,
+                                                                parts=st.session_state.selected_parts,
+                                                                section=section,
+                                                                time=st.session_state.selected_time,
+                                                                temperature=st.session_state.selected_temperature,
+                                                                model_name=st.session_state.selected_model,
+                                                                context=st.session_state.context)
 
-                        if st.session_state.ai_assistant:
-                            response = st.session_state.ai_memory.invoke(
-                                #{"input": st.session_state.user_input},
-                                {"input": aux},
-                                {"configurable": {"session_id": "unused"}},
-                            )
+                    st.session_state.ai_memory = add_memory_chain(st.session_state.chain, st.session_state.chat_memory)
+                    aux = (f'Hazme un guión de la parte: {section} del video sobre: {st.session_state.user_input}. '
+                           f'El guión debe ser uno solo y estará separado en {st.session_state.selected_parts} partes manteniendo '
+                           f'un solo guión de forma continua')
 
-                        script.append(response)
+                    if st.session_state.ai_assistant:
+                        response = st.session_state.ai_memory.invoke(
+                            #{"input": st.session_state.user_input},
+                            {"input": aux},
+                            {"configurable": {"session_id": "unused"}},
+                        )
 
-                    st.write('Script Generado:')
-                    for i in script:
-                        st.write(i)
+                    script.append(response)
+
+                st.write('Script Generado:')
+                for i in script:
+                    st.write(i)
 
         except Exception as e:
             st.warning(f'Se ha producido un error: {e}')
