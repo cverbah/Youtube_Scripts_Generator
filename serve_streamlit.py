@@ -4,13 +4,17 @@ from pathlib import Path
 from modal import Image, Mount, App, web_server
 import db_dtypes
 
-image = (Image.micromamba()
-         .pip_install("streamlit~=1.35.0", "numpy==1.23.5", "pandas==1.5.3",
+image = (Image.debian_slim()
+         .apt_install("git", "ffmpeg")  # .workdir("/app")
+         .pip_install("git+https://github.com/openai/whisper.git",
+                      "streamlit~=1.35.0", "numpy==1.23.5", "pandas==1.5.3",
                       "python-dotenv==1.0.0", "google-cloud-aiplatform==1.48.0",
                       "google-auth==2.29.0", "db-dtypes==1.2.0", "openpyxl==3.1.2",
                       "langchain-google-genai==1.0.8",
                       "langchain==0.2.14", "langchain-core==0.2.33",
-                      "langchain-experimental==0.0.64")
+                      "langchain-experimental==0.0.64", "yt-dlp==2024.10.22",
+                      "ffmpeg-python==0.2.0", "PyMuPDF==1.24.12", "pillow==10.3.0",
+                      "python-docx==1.1.2")
          )
 
 app = App(name="youtube-script-gen-v1", image=image)

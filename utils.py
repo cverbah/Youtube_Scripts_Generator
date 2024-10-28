@@ -54,6 +54,9 @@ def translate_script(input_language: str, output_language:str,
     return chain
 
 
+def save_dict_to_txt_download(dictionary):
+    return json.dumps(dictionary, ensure_ascii=False, indent=4)
+
 def save_dict_to_txt(dictionary, file_path):
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(dictionary, f, ensure_ascii=False, indent=4)
