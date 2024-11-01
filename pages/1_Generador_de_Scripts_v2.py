@@ -93,15 +93,6 @@ try:
 
         st.session_state.context = extracted_text
 
-        #st.text(extracted_text[:100])
-
-        # parse to json by chapters: too much tokens the output =(
-        #llm = split_file_to_chapters(model_name="gemini-1.5-flash-002", temperature=1)
-        #parsed_text = llm.invoke({"input": extracted_text})
-        #st.header("Contenido del archivo JSON")
-        #st.json(parsed_text)
-
-
     col1, col2 = st.columns([0.8, 0.3], gap='large')
     with col1:
         st.text_input('', key='widget', on_change=submit_query,

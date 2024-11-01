@@ -31,6 +31,38 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'GCP_key.json'
 vertexai.init(project=PROJECT_ID, location=LOCATION)
 
 
+def generate_youtube_summary(video_transcript: str, language: str,
+                             model_name="gemini-1.5-flash-002", temperature=1):
+    """generates tags for the user prompt"""
+    llm = GoogleGenerativeAI(model=model_name, google_api_key=GCP_API_KEY,
+                             generation_config={"max_output_tokens": 100,  # max
+                                                "temperature": temperature,
+                                                "top_p": 0.95,
+                                                })
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", [
+                f"Resumen del video de YouTube con el siguiente transcript: {video_transcript}. Estructura el resumen en tres secciones:\
+                    \
+                  Summary: Proporciona un resumen general del video en 2-3 frases, capturando la esencia y el objetivo principal del contenido.\
+                    \
+                  Highlights: Enumera los puntos más relevantes del video en forma de lista, resaltando los momentos importantes, temas destacados o secciones clave en orden de aparición.\
+                    \
+                  Key Insights: Lista los conocimientos clave o ideas principales del video que aporten valor, incluyendo cualquier enseñanza práctica, reflexiones o consejos que puedan ser aplicados por el espectador.\
+                    \
+                  Organiza el contenido para ofrecer una comprensión rápida y precisa de la información.\
+                    \
+                  **IDIOMA**: EL resumen debe ser en el siguiente idioma: {language}"
+            ],
+             ),
+            ("human", "{input}"),
+        ])
+
+    chain = prompt | llm
+    return chain
+
+
 def translate_script(input_language: str, output_language:str,
                      model_name="gemini-1.5-flash-002", temperature=0.9):
     """parses a text to json"""
