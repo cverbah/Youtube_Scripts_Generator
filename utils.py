@@ -155,6 +155,67 @@ def submit_query():
     st.session_state.widget = ''
 
 
+def generate_llm_chain_v2(language: str, channel_name: str, parts: int, section: int,  words: int,
+                          temperature: float, model_name: str, target_audience: str, video_style: str,
+                          context: str, previous_part: str):
+    """generates a script for Youtube video"""
+    assert 0 <= temperature <= 1, 'temperature must be between 0 and 1'
+    llm = GoogleGenerativeAI(model=model_name, google_api_key=GCP_API_KEY,
+                             generation_config={"max_output_tokens": 8192,  # max
+                                                "temperature": temperature,
+                                                "top_p": 0.95,
+                                                },
+                             safety_settings={
+                                 HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                                 HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                                 HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                                 HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                             })
+    words_per_section = int(words/parts)+1
+    parts_up_to = [i for i in range(1, section+1)]
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", [f"Eres un guionista experto en crear contenido para YouTube, enfocado en desarrollar guiones efectivos y originales para el canal {channel_name}.\
+                       El idioma del guión será {language}.\
+                       El guión estará separado en {parts} partes.\
+                       Estás generando la parte: {section} del guión.\
+                       El guión que debes continuar  y que corresponde a la parte {section-1} es: {previous_part}.\
+                       \
+                       **Objetivo:**Crear un guion atractivo y coherente para una audiencia específica: {target_audience}, usando un estilo de narración {video_style} que mantenga la atención del espectador mediante un flujo continuo entre secciones y una estructura de causa-efecto.\
+                        \
+                      **Desglose y Cohesión de Partes:** \
+                        - Desglosa el tema en subtemas lógicos y atractivos que sean relevantes para {target_audience}.Cada subtema debe avanzar hacia la resolución del tema central y conectar fluidamente con la parte anterior del guión: {section-1}.  \
+                        - **Continuidad:** La parte: {section} debe ser una continuación directa del guion generado en la parte {section - 1}, sin introducir nuevamente temas ya vistos ni hacer recapitulaciones. Nunca hagas introducciones o conclusiones en cada sección; el objetivo es mantener la narrativa como un solo guion continuo dividido en {parts} partes.\
+                        - Crea transiciones naturales entre las partes: {section} con {section - 1}, para que el cambio ocurra de forma imperceptible y se mantenga el interés. Nunca remarques que se inicia una nueva sección.\
+                        - **Importante:** En el párrafo inicial de cada parte: {section}, nunca hagas referencia a temas ya tratados en las partes anteriores. El guion debe leerse como un solo texto fluido, sin recordar o resumir el contenido previo.\
+                        \
+                       **Uso del Contexto:** Basándote en el contexto proporcionado: {context}, construye cada sección del guion en torno a este, evitando repeticiones y manteniendo una narrativa coherente.\
+                        \
+                        **Técnicas Virales:**\
+                        - Introduce elementos que fomenten la curiosidad y el “factor sorpresa,” tales como preguntas intrigantes, datos inesperados o conceptos novedosos en cada parte.\
+                        \
+                       **Estructura por Parte:**\
+                       - **Duración por sección:** Cada seccion debe tener alrededor de: {words_per_section} palabras.\
+                       - **Inicio y Cierre:** Solo si es la primera parte (parte 1) incluye una bienvenida en el canal {channel_name}, introduciendo el tema y sus beneficios. Nunca incluyas introducciones en las demás partes. En la última sección, cierra emocionalmente, invitando a los espectadores a seguir viendo y compartiendo el contenido del canal.\
+                       - **Interacción con el público:** Incita a suscribirse y anima a comentar usando técnicas de CALL TO ACTION solo en la parte más importante del guión (solo 1 vez en total).\
+                        \
+                       **Formato por Parte:**\
+                       - **Narrador:** Guión narrado para la parte: {section}, siguiendo el siguiente estilo de narración: {video_style}.\
+                       - **Imagen o Video:** Sugerencias de imagenes o videos relevantes acorde a al párrafo que se está narrando.\
+                       - **Tiempo:** Rango de tiempo estimado para esta sección.\
+                        \
+                       **Nota 1:** Revisa constantemente las partes previas: {parts_up_to}. Revisa el contenido generado para evitar repeticiones y asegurar coherencia en todo el guión, manteniendo un flujo continuo en la narrativa sin introducciones a la siguiente parte al final de cada sección.\
+                       **Nota 2: ** Solo has una introducción en la parte 1 y un cierre del guión en  la parte: {parts} "
+                ],
+             ),
+            ("placeholder", "{chat_history}"),
+            ("human", "{input}"),
+        ])
+
+    chain = prompt | llm
+    return chain
+
+
 def generate_llm_chain(language: str, channel_name: str, parts: int, section: int, time: int,
                        temperature: float, model_name: str, context: str):
     """generates a script for Youtube video"""
